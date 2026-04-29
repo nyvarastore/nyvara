@@ -1,7 +1,7 @@
 [build]
   base    = "client"
   command = "npm run build"
-  publish = ".next"
+  # Do not set "publish" when using Next.js on Netlify; the plugin handles it.
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
