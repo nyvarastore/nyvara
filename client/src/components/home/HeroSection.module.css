@@ -1,0 +1,149 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-cream);
+  padding-top: var(--nav-height);
+}
+
+/* Background split blocks */
+.bgLeft  {
+  position: absolute; top: 0; left: 0;
+  width: 42%; height: 100%;
+  background: var(--color-cream);
+  z-index: 0;
+}
+.bgRight {
+  position: absolute; top: 0; right: 0;
+  width: 58%; height: 100%;
+  background: linear-gradient(160deg, #F0E6D2 0%, var(--color-cream) 100%);
+  z-index: 0;
+}
+
+.inner {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+  gap: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Text Column ─────────────────────────────────── */
+.textCol {
+  flex: 0 0 auto;
+  width: 420px;
+  animation: fadeUp 0.8s ease both;
+}
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 20px;
+}
+.headline {
+  font-family: var(--font-editorial);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  line-height: 0.95;
+  color: var(--color-black);
+  margin-bottom: 28px;
+}
+.headlineThin { font-weight: 300; }
+.subline {
+  font-size: 14px;
+  color: var(--color-grey);
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+  margin-bottom: 40px;
+}
+.actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.primaryCta {
+  display: inline-flex; align-items: center;
+  padding: 14px 36px;
+  background: var(--color-black);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: all var(--transition-base);
+}
+.primaryCta:hover { background: var(--color-charcoal); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+.secondaryCta {
+  display: inline-flex; align-items: center;
+  padding: 14px 36px;
+  border: 1.5px solid var(--color-black);
+  color: var(--color-black);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: all var(--transition-base);
+}
+.secondaryCta:hover { background: var(--color-black); color: var(--color-white); }
+
+/* ─── Visual Column ───────────────────────────────── */
+.visual {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 1s ease 0.3s both;
+}
+.heroImage {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%;
+  max-width: 560px;
+}
+.glassesSvg {
+  width: 100%; max-width: 440px;
+  color: var(--color-black);
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.12));
+  animation: float 4s ease-in-out infinite;
+}
+.heroAccent {
+  position: absolute;
+  width: 340px; height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 70%);
+  z-index: -1;
+}
+
+/* ─── Scroll indicator ────────────────────────────── */
+.scrollIndicator {
+  position: absolute;
+  bottom: 32px;
+  left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: var(--color-grey);
+  z-index: 1;
+  transition: color var(--transition-fast);
+}
+.scrollIndicator:hover { color: var(--color-black); }
+.scrollText { font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; }
+.scrollArrow { animation: bounce 2s ease-in-out infinite; }
+
+@keyframes fadeUp  { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes float   { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes bounce  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+@media (max-width: 900px) {
+  .inner { flex-direction: column; padding-top: 40px; gap: 32px; }
+  .textCol { width: 100%; text-align: center; }
+  .actions { justify-content: center; }
+  .bgRight { width: 100%; }
+}

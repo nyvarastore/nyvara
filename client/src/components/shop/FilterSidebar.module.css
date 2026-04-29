@@ -1,0 +1,74 @@
+.sidebar {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.sidebarHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--color-cream-dark);
+}
+.sidebarTitle {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--color-black);
+}
+.resetBtn {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 500;
+  color: var(--color-grey);
+  transition: color var(--transition-fast);
+}
+.resetBtn:hover { color: var(--color-error); }
+
+.section { border-bottom: 1px solid var(--color-cream-dark); }
+.section:last-child { border-bottom: none; }
+
+.sectionToggle {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; font-size: 13px; font-weight: 500;
+  color: var(--color-black);
+  transition: background var(--transition-fast);
+}
+.sectionToggle:hover { background: var(--color-cream); }
+
+.options { padding: 4px 20px 16px; display: flex; flex-direction: column; gap: 10px; }
+.optionLabel {
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+}
+.radio { width: 15px; height: 15px; accent-color: var(--color-gold); flex-shrink: 0; }
+.optionText { font-size: 13px; color: var(--color-charcoal); }
+
+/* Desktop */
+.desktopWrap { display: block; }
+
+/* Mobile */
+.mobileWrap  { display: none; }
+.mobileDrawer {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.5);
+  animation: fadeIn 0.2s ease;
+}
+.mobileDrawerInner {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--color-cream);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  max-height: 80vh; overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+.mobileDrawerHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px;
+  font-family: var(--font-editorial); font-size: 1.2rem;
+  border-bottom: 1px solid var(--color-cream-dark);
+}
+.mobileApply { padding: 20px 24px; background: var(--color-white); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+@media (max-width: 768px) {
+  .desktopWrap { display: none; }
+  .mobileWrap  { display: block; }
+}

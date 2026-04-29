@@ -1,0 +1,69 @@
+.summary { display: flex; flex-direction: column; gap: 14px; }
+.row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 14px; color: var(--color-grey);
+}
+.label { color: var(--color-grey); }
+.free { color: var(--color-success); font-weight: 500; }
+.totalRow {
+  padding-top: 14px;
+  border-top: 1px solid var(--color-cream-dark);
+  font-size: 16px; font-weight: 600;
+  color: var(--color-black);
+}
+.totalAmount { font-size: 18px; color: var(--color-black); }
+.hint { text-align: center; font-size: 11px; color: var(--color-grey-light); margin-top: 4px; }
+
+/* Checkout */
+.checkout { display: flex; flex-direction: column; gap: 16px; }
+.sectionTitle {
+  font-family: var(--font-editorial);
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.form { display: flex; flex-direction: column; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.input {
+  border: 1px solid var(--color-cream-dark);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: 14px;
+  outline: none;
+  background: var(--color-white);
+  transition: border-color var(--transition-fast);
+}
+.input:focus { border-color: var(--color-gold); }
+.recap {
+  display: flex; justify-content: space-between;
+  padding: 12px 0;
+  border-top: 1px solid var(--color-cream-dark);
+  border-bottom: 1px solid var(--color-cream-dark);
+  font-size: 14px;
+}
+.recapTotal { font-weight: 600; }
+.errorMsg { font-size: 13px; color: var(--color-error); }
+
+/* Success */
+.success {
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  gap: 16px; padding: 24px 0;
+}
+.successIcon {
+  width: 64px; height: 64px;
+  background: var(--color-gold);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  font-weight: 300;
+  animation: pop 0.4s ease;
+}
+.successTitle {
+  font-family: var(--font-editorial);
+  font-size: 1.8rem; font-weight: 500;
+}
+.successText { font-size: 14px; color: var(--color-grey); line-height: 1.6; }
+
+@keyframes pop { 0% { transform: scale(0); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }

@@ -1,0 +1,139 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import styles from './FrameCarousel.module.css';
+
+const FRAME_STYLES = [
+  {
+    id: 'wayfarer',
+    name: 'Wayfarer',
+    description: 'Montures carrées iconiques avec une silhouette audacieuse et inétemporelle.',
+    shape: (
+      <svg viewBox="0 0 260 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="10" y="15" width="100" height="70" rx="8" fill="none" stroke="currentColor" strokeWidth="5"/>
+        <rect x="150" y="15" width="100" height="70" rx="8" fill="none" stroke="currentColor" strokeWidth="5"/>
+        <line x1="110" y1="50" x2="150" y2="50" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <line x1="10"  y1="40" x2="0"   y2="25" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <line x1="250" y1="40" x2="260" y2="25" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <rect x="15" y="20" width="90" height="60" rx="6" fill="currentColor" opacity="0.06"/>
+        <rect x="155" y="20" width="90" height="60" rx="6" fill="currentColor" opacity="0.06"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'round',
+    name: 'Rond Classique',
+    description: 'Montures circulaires douces avec une personnalité rétro-chic.',
+    shape: (
+      <svg viewBox="0 0 260 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="65"  cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="5"/>
+        <circle cx="195" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="5"/>
+        <line x1="110" y1="50" x2="150" y2="50" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <line x1="20"  y1="28" x2="8"   y2="15" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <line x1="240" y1="28" x2="252" y2="15" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <circle cx="65"  cy="50" r="40" fill="currentColor" opacity="0.06"/>
+        <circle cx="195" cy="50" r="40" fill="currentColor" opacity="0.06"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'aviator',
+    name: 'Aviateur',
+    description: "Verres en larme classiques nés du patrimoine de l'aviation.",
+    shape: (
+      <svg viewBox="0 0 260 110" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M20 35 Q20 95 65 95 Q110 95 110 35 Q110 15 65 15 Q20 15 20 35Z" fill="none" stroke="currentColor" strokeWidth="5"/>
+        <path d="M150 35 Q150 95 195 95 Q240 95 240 35 Q240 15 195 15 Q150 15 150 35Z" fill="none" stroke="currentColor" strokeWidth="5"/>
+        <line x1="110" y1="30" x2="150" y2="30" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <line x1="20"  y1="30" x2="8"   y2="18" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <line x1="240" y1="30" x2="252" y2="18" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <path d="M25 35 Q25 88 65 88 Q105 88 105 35 Q105 20 65 20 Q25 20 25 35Z" fill="currentColor" opacity="0.06"/>
+        <path d="M155 35 Q155 88 195 88 Q235 88 235 35 Q235 20 195 20 Q155 20 155 35Z" fill="currentColor" opacity="0.06"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'cateye',
+    name: 'Œil-de-chat',
+    description: "Coins relevés qui ajoutent du drame et une touche féminine.",
+    shape: (
+      <svg viewBox="0 0 260 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M10 60 Q10 25 55 18 Q100 25 100 60 Q100 90 55 90 Q10 90 10 60Z" fill="none" stroke="currentColor" strokeWidth="5"/>
+        <path d="M160 60 Q160 25 205 18 Q250 25 250 60 Q250 90 205 90 Q160 90 160 60Z" fill="none" stroke="currentColor" strokeWidth="5"/>
+        <line x1="100" y1="58" x2="160" y2="58" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <line x1="10"  y1="50" x2="0"   y2="35" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <line x1="250" y1="50" x2="260" y2="35" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+        <path d="M15 60 Q15 28 55 22 Q95 28 95 60 Q95 86 55 86 Q15 86 15 60Z" fill="currentColor" opacity="0.06"/>
+        <path d="M165 60 Q165 28 205 22 Q245 28 245 60 Q245 86 205 86 Q165 86 165 60Z" fill="currentColor" opacity="0.06"/>
+      </svg>
+    ),
+  },
+];
+
+export default function FrameCarousel() {
+  const [current, setCurrent] = useState(0);
+
+  const prev = () => setCurrent(i => (i - 1 + FRAME_STYLES.length) % FRAME_STYLES.length);
+  const next = () => setCurrent(i => (i + 1) % FRAME_STYLES.length);
+
+  const frame = FRAME_STYLES[current];
+
+  return (
+    <section className={styles.section}>
+      {/* Background watermark text */}
+      <span className={styles.watermark} aria-hidden="true">
+        {frame.name.toUpperCase()}
+      </span>
+
+      <div className={styles.inner}>
+        <div className={styles.textCol}>
+          <p className={styles.eyebrow}>Choisissez Votre Monture</p>
+          <h2 className={styles.headline}>CHOISISSEZ VOTRE<br />STYLE DE MONTURE</h2>
+          <p className={styles.sub}>
+            Choisissez votre style de lunettes préféré<br />
+            et faites-en votre propre style.
+          </p>
+          <Link href={`/shop`} className={styles.cta}>
+            Personnaliser
+          </Link>
+        </div>
+
+        <div className={styles.carouselCol}>
+          {/* Navigation */}
+          <button className={styles.navBtn} onClick={prev} aria-label="Previous frame">
+            <ArrowLeft size={20} />
+          </button>
+
+          {/* Frame display */}
+          <div className={styles.frameDisplay} key={frame.id}>
+            <div className={styles.frameSvgWrap}>
+              {frame.shape}
+            </div>
+            <p className={styles.frameName}>{frame.name}</p>
+            <p className={styles.frameDesc}>{frame.description}</p>
+          </div>
+
+          <button className={styles.navBtn} onClick={next} aria-label="Next frame">
+            <ArrowRight size={20} />
+          </button>
+        </div>
+      </div>
+
+      {/* Dots */}
+      <div className={styles.dots} role="tablist" aria-label="Frame style selector">
+        {FRAME_STYLES.map((f, i) => (
+          <button
+            key={f.id}
+            className={`${styles.dot} ${i === current ? styles.dotActive : ''}`}
+            onClick={() => setCurrent(i)}
+            role="tab"
+            aria-selected={i === current}
+            aria-label={f.name}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}

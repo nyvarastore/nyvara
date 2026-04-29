@@ -1,0 +1,66 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 1024px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px)  { .grid { grid-template-columns: 1fr; gap: 16px; } }
+
+.loadingWrap, .errorWrap, .emptyWrap {
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+}
+.errorText  { color: var(--color-error); font-size: 14px; }
+.emptyTitle { font-family: var(--font-editorial); font-size: 1.5rem; font-weight: 400; }
+.emptyText  { font-size: 14px; color: var(--color-grey); }
+
+/* ─── Quick View Modal ─────────────────────── */
+.quickView {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+@media (max-width: 600px) {
+  .quickView { grid-template-columns: 1fr; }
+}
+.qvImage {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-cream);
+}
+.qvImg { object-fit: cover; }
+.qvPlaceholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-editorial);
+  font-size: 1.5rem;
+  letter-spacing: 0.2em;
+  color: var(--color-grey-light);
+  background: linear-gradient(135deg, var(--color-cream), var(--color-cream-dark));
+}
+.qvInfo { display: flex; flex-direction: column; gap: 16px; }
+.qvCategory {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+.qvTitle {
+  font-family: var(--font-editorial);
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-black);
+}
+.qvDescription { font-size: 14px; color: var(--color-grey); line-height: 1.7; }
+.qvPrice { font-size: 1.3rem; font-weight: 700; color: var(--color-black); }
+.qvGender { font-size: 13px; color: var(--color-grey); }

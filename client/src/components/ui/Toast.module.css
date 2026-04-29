@@ -1,0 +1,31 @@
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hover);
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 280px;
+  max-width: 400px;
+  animation: slideIn 0.3s ease;
+}
+.success { background: #F0FBF4; color: #1A6B3A; border: 1px solid #A8DDB5; }
+.error   { background: #FEF2F2; color: #9B1C1C; border: 1px solid #FECACA; }
+.info    { background: #FFF9F0; color: #7A5020; border: 1px solid var(--color-gold-light); }
+.icon { flex-shrink: 0; display: flex; }
+.message { flex: 1; }
+.close {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: var(--radius-full);
+  color: currentColor; opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+.close:hover { opacity: 1; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}

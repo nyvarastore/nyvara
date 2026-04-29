@@ -1,0 +1,42 @@
+.section {
+  padding: 80px 0;
+  background: var(--color-black);
+  color: var(--color-white);
+}
+.inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+.header { text-align: center; margin-bottom: 56px; }
+.eyebrow {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--color-gold); margin-bottom: 12px;
+}
+.headline {
+  font-family: var(--font-editorial);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 400; letter-spacing: 0.06em;
+  color: var(--color-white);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+.card {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 16px;
+  padding: 32px 20px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition-base), transform var(--transition-base);
+}
+.card:hover { border-color: var(--color-gold); transform: translateY(-4px); }
+.icon { color: var(--color-gold); }
+.cardTitle {
+  font-family: var(--font-editorial);
+  font-size: 1.1rem; font-weight: 500;
+  color: var(--color-white);
+}
+.cardDesc { font-size: 13px; color: rgba(247,243,237,0.55); line-height: 1.7; }
+
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
