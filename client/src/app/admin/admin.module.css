@@ -1,0 +1,212 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #fcfcfc;
+}
+
+/* ─── Sidebar ─────────────────────────────── */
+.sidebar {
+  width: 260px;
+  background-color: var(--color-black);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebarHeader {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+  font-family: var(--font-editorial);
+  font-size: 1.5rem;
+  letter-spacing: 0.1em;
+  color: var(--color-gold);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  gap: 8px;
+  flex: 1;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-size: 15px;
+}
+
+.navItem:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.navItem[data-active="true"] {
+  background-color: var(--color-gold);
+  color: white;
+}
+
+.sidebarFooter {
+  padding: 24px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  width: 100%;
+  color: #ff6b6b;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 15px;
+  text-align: left;
+}
+
+.logoutBtn:hover {
+  background-color: rgba(255, 107, 107, 0.1);
+}
+
+/* ─── Main Content ────────────────────────── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topHeader {
+  height: 70px;
+  background-color: white;
+  border-bottom: 1px solid var(--color-cream-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.headerTitle {
+  font-weight: 500;
+  color: var(--color-grey);
+}
+
+.adminProfile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--color-gold);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-editorial);
+  font-size: 1.2rem;
+}
+
+.contentArea {
+  padding: 32px;
+  flex: 1;
+}
+
+/* ─── Common Page Elements ────────────────── */
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.pageTitle {
+  font-family: var(--font-editorial);
+  font-size: 2rem;
+  color: var(--color-black);
+}
+
+/* Tables */
+.tableContainer {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--color-cream-dark);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding: 16px 24px;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-grey);
+  border-bottom: 1px solid var(--color-cream-dark);
+  background: var(--color-cream);
+}
+
+.table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--color-cream-dark);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.statusPending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.statusConfirmed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.statusCancelled {
+  background: #f8d7da;
+  color: #721c24;
+}

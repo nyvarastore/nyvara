@@ -1,0 +1,70 @@
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.metricCard {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--color-cream-dark);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.metricCard.accent {
+  background: var(--color-black);
+  color: white;
+  border: none;
+}
+
+.metricTitle {
+  font-size: 14px;
+  color: var(--color-grey);
+  margin-bottom: 12px;
+}
+
+.accent .metricTitle {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.metricValue {
+  font-family: var(--font-editorial);
+  font-size: 2.5rem;
+  color: var(--color-black);
+  margin-bottom: 4px;
+}
+
+.accent .metricValue {
+  color: var(--color-gold);
+}
+
+.metricSub {
+  font-size: 13px;
+  color: var(--color-grey);
+}
+
+.accent .metricSub {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.chartSection {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--color-cream-dark);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.sectionTitle {
+  font-family: var(--font-editorial);
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  color: var(--color-black);
+}
+
+/* ─── Orders Table inside Dashboard ─── */
+.tableWrapper {
+  overflow-x: auto;
+}

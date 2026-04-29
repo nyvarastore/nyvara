@@ -1,0 +1,55 @@
+.productImage {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--color-cream);
+}
+
+.actionBtn {
+  background: none;
+  border: 1px solid var(--color-cream-dark);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--color-black);
+}
+
+.actionBtn:hover {
+  background: var(--color-cream);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputGroup label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-cream-dark);
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  outline: none;
+  font-family: inherit;
+}
+
+.input:focus {
+  border-color: var(--color-gold);
+}
