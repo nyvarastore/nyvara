@@ -29,6 +29,7 @@ export interface Order {
   postal_code: string | null;
   country: string | null;
   total_price: number | null;
+  status?: string | null;
   created_at: string | null;
 }
 

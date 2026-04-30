@@ -90,7 +90,7 @@ export default function AdminProductsPage() {
             {products.map(product => (
               <tr key={product.id}>
                 <td>
-                  <img src={product.image_url || ''} alt={product.title} className={styles.productImage} />
+                  <img src={product.image_url || ''} alt={product.title || 'Produit'} className={styles.productImage} />
                 </td>
                 <td>{product.title}</td>
                 <td>{product.price?.toFixed(3)} TND</td>

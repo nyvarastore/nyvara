@@ -45,11 +45,11 @@ export default function AdminOrdersPage() {
             {orders.map(order => (
               <tr key={order.id}>
                 <td>#{order.id.slice(0,8)}</td>
-                <td>{order.nom} {order.prenom}</td>
-                <td>{order.telephone}</td>
-                <td>{order.ville}</td>
-                <td>{new Date(order.created_at).toLocaleDateString('fr-FR')}</td>
-                <td>{order.total?.toFixed(3)} TND</td>
+                <td>{order.customer_name}</td>
+                <td>{order.phone}</td>
+                <td>{order.city}</td>
+                <td>{new Date(order.created_at || '').toLocaleDateString('fr-FR')}</td>
+                <td>{order.total_price?.toFixed(3)} TND</td>
                 <td>
                   <span className={`${adminStyles.statusBadge} ${adminStyles.statusPending}`}>
                     {order.status || 'En attente'}

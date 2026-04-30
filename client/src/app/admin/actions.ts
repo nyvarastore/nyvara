@@ -12,7 +12,8 @@ export async function loginAction(formData: FormData) {
 
   if (password === adminPassword) {
     // Set a cookie that expires in 7 days
-    cookies().set('nyvara_admin_auth', 'authenticated', {
+    const cookieStore = await cookies();
+    cookieStore.set('nyvara_admin_auth', 'authenticated', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -26,5 +27,6 @@ export async function loginAction(formData: FormData) {
 }
 
 export async function logoutAction() {
-  cookies().delete('nyvara_admin_auth');
+  const cookieStore = await cookies();
+  cookieStore.delete('nyvara_admin_auth');
 }

@@ -21,12 +21,12 @@ export default function AdminDashboardPage() {
       });
   }, []);
 
-  const totalRevenue = orders.reduce((sum, o) => sum + (o.total ?? 0), 0);
+  const totalRevenue = orders.reduce((sum, o) => sum + (o.total_price ?? 0), 0);
   
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const ordersToday = orders.filter(o => new Date(o.created_at) >= today);
-  const revenueToday = ordersToday.reduce((sum, o) => sum + (o.total ?? 0), 0);
+  const ordersToday = orders.filter(o => new Date(o.created_at || '').getTime() >= today.getTime());
+  const revenueToday = ordersToday.reduce((sum, o) => sum + (o.total_price ?? 0), 0);
 
   if (loading) return <div className={adminStyles.contentArea}>Chargement...</div>;
 
@@ -73,9 +73,9 @@ export default function AdminDashboardPage() {
               {orders.slice(0, 5).map(order => (
                 <tr key={order.id}>
                   <td>#{order.id.slice(0,8)}</td>
-                  <td>{order.nom} {order.prenom}</td>
-                  <td>{new Date(order.created_at).toLocaleDateString('fr-FR')}</td>
-                  <td>{order.total?.toFixed(3)} TND</td>
+                  <td>{order.customer_name}</td>
+                  <td>{new Date(order.created_at || '').toLocaleDateString('fr-FR')}</td>
+                  <td>{order.total_price?.toFixed(3)} TND</td>
                   <td>
                     <span className={`${adminStyles.statusBadge} ${adminStyles.statusPending}`}>
                       {order.status || 'En attente'}
