@@ -36,6 +36,10 @@ export default function Navbar() {
   // Close menu on route change
   useEffect(() => { setMenuOpen(false); setSearchOpen(false); }, [pathname]);
 
+  if (pathname.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <>
       <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
