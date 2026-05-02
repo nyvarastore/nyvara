@@ -1,16 +1,28 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, ShoppingCart, Package, LogOut } from 'lucide-react';
 import { logoutAction } from './actions';
+import { useOrderNotification } from '@/hooks/useOrderNotification';
+import OrderToast from '@/components/admin/OrderToast';
+import type { Order } from '@/types';
 import styles from './admin.module.css';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [newOrder, setNewOrder] = useState<Order | null>(null);
+
+  useOrderNotification({
+    onNewOrder: (order) => setNewOrder(order),
+  });
 
   return (
     <div className={styles.layout}>
+      {/* New order toast notification */}
+      <OrderToast order={newOrder} onClose={() => setNewOrder(null)} />
+
       {/* Sidebar */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
@@ -44,10 +56,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main Content */}
       <div className={styles.main}>
-        {/* Top Header */}
         <header className={styles.topHeader}>
           <div className={styles.headerTitle}>
-            Bienvenue dans l'espace d'administration
+            Bienvenue dans l&apos;espace d&apos;administration
           </div>
           <div className={styles.adminProfile}>
             <div className={styles.avatar}>A</div>
