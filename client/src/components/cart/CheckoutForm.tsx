@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { useCreateOrder } from '@/hooks/useOrders';
 import { Check, Loader2, ShieldCheck, Truck, CreditCard } from 'lucide-react';
 import styles from './CheckoutForm.module.css';
+import { fbEvent, trackPurchase } from '@/components/analytics/FacebookPixel';
 
 interface CheckoutFormProps {
   onSuccess: () => void;
@@ -14,6 +15,15 @@ export default function CheckoutForm({ onSuccess }: CheckoutFormProps) {
   const { items, total, clearCart } = useCart();
   const { createOrder, loading } = useCreateOrder();
   const [errorLocal, setErrorLocal] = useState<string | null>(null);
+
+  // Fire InitiateCheckout once when form mounts (user is in checkout)
+  useEffect(() => {
+    fbEvent.initiateCheckout({
+      value:     total,
+      num_items: items.reduce((s, i) => s + i.quantity, 0),
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [formData, setFormData] = useState({
     prenom: '',
@@ -59,6 +69,19 @@ export default function CheckoutForm({ onSuccess }: CheckoutFormProps) {
     const result = await createOrder(payload);
 
     if (result) {
+      // Fire Purchase on both client pixel + server CAPI for reliable attribution
+      await trackPurchase({
+        order_id:    String(result.id ?? Date.now()),
+        value:       total,
+        email:       formData.email,
+        phone:       formData.telephone,
+        first_name:  formData.prenom || undefined,
+        last_name:   formData.nom,
+        city:        formData.ville,
+        country:     formData.pays,
+        content_ids: items.map(i => String(i.product.id)),
+        num_items:   items.reduce((s, i) => s + i.quantity, 0),
+      });
       clearCart();
       onSuccess();
     } else {

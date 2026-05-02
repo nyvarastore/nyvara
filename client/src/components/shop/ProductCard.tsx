@@ -1,12 +1,14 @@
 'use client';
 
 import Image from 'next/image';
+import { useEffect, useRef } from 'react';
 import { Heart, ShoppingBag, Eye } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
 import Badge from '@/components/ui/Badge';
 import type { Product } from '@/types';
 import styles from './ProductCard.module.css';
+import { fbEvent } from '@/components/analytics/FacebookPixel';
 
 interface ProductCardProps {
   product: Product;
@@ -21,12 +23,53 @@ const formatTND = (price: number | null) => {
 export default function ProductCard({ product, onQuickView }: ProductCardProps) {
   const { addItem, isInCart } = useCart();
   const { addToWishlist, removeFromWishlist, isWishlisted } = useWishlist();
+  const viewFired = useRef(false);
+  const cardRef   = useRef<HTMLElement>(null);
 
-  const inCart      = isInCart(product.id);
-  const wishlisted  = isWishlisted(product.id);
+  const inCart     = isInCart(product.id);
+  const wishlisted = isWishlisted(product.id);
 
-  const handleWishlist = () =>
-    wishlisted ? removeFromWishlist(product.id) : addToWishlist(product);
+  // Fire ViewContent once when card enters viewport (retargeting signal)
+  useEffect(() => {
+    if (!cardRef.current || viewFired.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !viewFired.current) {
+          viewFired.current = true;
+          fbEvent.viewContent({
+            content_ids:  [String(product.id)],
+            content_name: product.title ?? 'Sunglasses',
+            value:        product.price ?? 0,
+          });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, [product]);
+
+  const handleAddToCart = () => {
+    addItem(product);
+    fbEvent.addToCart({
+      content_ids:  [String(product.id)],
+      content_name: product.title ?? 'Sunglasses',
+      value:        product.price ?? 0,
+    });
+  };
+
+  const handleWishlist = () => {
+    if (wishlisted) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+      fbEvent.addToWishlist({
+        content_ids:  [String(product.id)],
+        content_name: product.title ?? 'Sunglasses',
+      });
+    }
+  };
 
   const genderLabel: Record<string, string> = {
     homme: "Men's",
@@ -35,7 +78,7 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
   };
 
   return (
-    <article className={styles.card} aria-label={product.title ?? 'Product'}>
+    <article ref={cardRef} className={styles.card} aria-label={product.title ?? 'Product'}>
       {/* Image */}
       <div className={styles.imageWrap}>
         {product.image_url ? (
@@ -97,7 +140,7 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
           <p className={styles.price}>{formatTND(product.price)}</p>
           <button
             className={`${styles.addBtn} ${inCart ? styles.inCart : ''}`}
-            onClick={() => addItem(product)}
+            onClick={handleAddToCart}
             aria-label={inCart ? 'Added to cart' : 'Add to cart'}
           >
             <ShoppingBag size={14} />

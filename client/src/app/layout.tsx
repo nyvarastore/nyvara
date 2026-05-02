@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer';
 import { CartProvider } from '@/context/CartContext';
 import { WishlistProvider } from '@/context/WishlistContext';
 import MainWrapper from '@/components/layout/MainWrapper';
+import FacebookPixel from '@/components/analytics/FacebookPixel';
 
 export const metadata: Metadata = {
   title: {
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <FacebookPixel />
       </head>
       <body>
         <CartProvider>

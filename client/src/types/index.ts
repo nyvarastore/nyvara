@@ -31,6 +31,11 @@ export interface Order {
   total_price: number | null;
   status?: string | null;
   created_at: string | null;
+  // Cosmos delivery fields
+  cosmos_barcode?: string | null;
+  cosmos_label_url?: string | null;
+  cosmos_label_pdf_url?: string | null;
+  cosmos_status?: string | null;
 }
 
 export interface OrderItem {

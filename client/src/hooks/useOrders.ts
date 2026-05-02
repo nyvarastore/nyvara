@@ -86,6 +86,40 @@ export function useCreateOrder() {
 
       if (itemsErr) throw itemsErr;
 
+      // 4. Create delivery order in Cosmos (fire-and-forget, don't block the customer)
+      try {
+        const cosmosRes = await fetch('/api/cosmos/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customer_name: payload.customer_name,
+            phone:         payload.phone,
+            city:          payload.city,
+            total_price:   total_price,
+            quantity:      payload.items.reduce((s, i) => s + i.quantity, 0),
+          }),
+        });
+
+        if (cosmosRes.ok) {
+          const cosmosData = await cosmosRes.json();
+          const delivery   = cosmosData.data;
+
+          // Save Cosmos barcode + label URLs back to the Supabase order row
+          await supabase
+            .from('orders')
+            .update({
+              cosmos_barcode:      delivery.barcode,
+              cosmos_label_url:    delivery.labelUrl,
+              cosmos_label_pdf_url: delivery.labelPdfUrl,
+              cosmos_status:       delivery.status,
+            })
+            .eq('id', order.id);
+        }
+      } catch (cosmosErr) {
+        // Log but don't fail the customer order
+        console.error('[Cosmos] Delivery creation failed:', cosmosErr);
+      }
+
       setSuccess(true);
       return order;
     } catch (e: unknown) {

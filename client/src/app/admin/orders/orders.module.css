@@ -1,0 +1,98 @@
+.syncArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.syncMeta {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+.syncMeta strong {
+  color: var(--color-gold);
+}
+
+.syncBtn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--color-gold);
+  background: transparent;
+  color: var(--color-gold);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.syncBtn:hover:not(:disabled) {
+  background: var(--color-gold);
+  color: #000;
+}
+.syncBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Delivery Status Badges ── */
+.deliveryBadge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.pending     { background: rgba(255,200,80,0.15);  color: #f5c842; border: 1px solid rgba(245,200,66,0.3); }
+.picking     { background: rgba(80,180,255,0.15);  color: #50b4ff; border: 1px solid rgba(80,180,255,0.3); }
+.depot       { background: rgba(150,100,255,0.15); color: #9664ff; border: 1px solid rgba(150,100,255,0.3); }
+.delivering  { background: rgba(80,220,180,0.15);  color: #50dca0; border: 1px solid rgba(80,220,180,0.3); }
+.verify      { background: rgba(255,150,50,0.15);  color: #ff9632; border: 1px solid rgba(255,150,50,0.3); }
+.delivered   { background: rgba(50,220,100,0.15);  color: #32dc64; border: 1px solid rgba(50,220,100,0.3); }
+.returned    { background: rgba(255,80,80,0.15);   color: #ff5050; border: 1px solid rgba(255,80,80,0.3); }
+.transit     { background: rgba(100,160,255,0.15); color: #64a0ff; border: 1px solid rgba(100,160,255,0.3); }
+.noShipment  { background: rgba(120,120,120,0.1);  color: #888;    border: 1px solid rgba(120,120,120,0.2); }
+
+/* ── Label Buttons ── */
+.labelBtns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.labelBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  background: rgba(255,200,80,0.12);
+  color: var(--color-gold);
+  border: 1px solid rgba(255,200,80,0.3);
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.labelBtn:hover {
+  background: rgba(255,200,80,0.25);
+}
+
+.labelBtnHtml {
+  background: rgba(80,180,255,0.12);
+  color: #50b4ff;
+  border-color: rgba(80,180,255,0.3);
+}
+.labelBtnHtml:hover {
+  background: rgba(80,180,255,0.25);
+}
+
+.noLabel {
+  color: #555;
+  font-size: 13px;
+}
