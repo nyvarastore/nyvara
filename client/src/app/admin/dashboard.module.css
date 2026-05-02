@@ -49,6 +49,98 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
+/* ─── Revenue Calculator ─── */
+.calcSection {
+  background: white;
+  border-radius: 12px;
+  padding: 28px;
+  border: 1px solid var(--color-cream-dark);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  margin-bottom: 32px;
+}
+
+.calcGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  .calcGrid { grid-template-columns: 1fr; }
+  .dashboardGrid { grid-template-columns: 1fr 1fr; }
+}
+
+.tariffCard,
+.breakdownCard {
+  background: var(--color-cream, #f8f5f0);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid var(--color-cream-dark, #e8e0d5);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tariffTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-grey);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+}
+
+.tariffRow,
+.calcRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: var(--color-black);
+}
+
+.tariffVal {
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+.divider {
+  height: 1px;
+  background: var(--color-cream-dark, #e8e0d5);
+  margin: 4px 0;
+}
+
+.tariffTotal {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Net Revenue Row */
+.netRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+.positive    { color: #32dc64; font-weight: 600; }
+.negative    { color: #ff5050; font-weight: 600; }
+.netPositive { color: #32dc64; }
+.netNegative { color: #ff5050; }
+
+.calcHint {
+  font-size: 11px;
+  color: #999;
+  margin-top: 8px;
+  line-height: 1.5;
+  border-top: 1px dashed var(--color-cream-dark);
+  padding-top: 10px;
+}
+
+/* ─── Recent Orders Section ─── */
 .chartSection {
   background: white;
   border-radius: 12px;
@@ -64,7 +156,6 @@
   color: var(--color-black);
 }
 
-/* ─── Orders Table inside Dashboard ─── */
 .tableWrapper {
   overflow-x: auto;
 }

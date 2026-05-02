@@ -31,15 +31,16 @@ export async function POST(req: NextRequest) {
 
     // Map Nyvara order fields → Cosmos fields
     const cosmosPayload = {
-      name:          body.customer_name,
-      phone:         body.phone,
-      address:       body.address || body.city,
-      city:          matchCity(body.city),
-      totalAmount:   Number(body.total_price ?? 0),
-      quantity:      Number(body.quantity ?? 1),
-      content:       body.content || 'Lunettes de soleil Nyvara',
-      note:          body.note ?? undefined,
-      source:        'nyvara',
+      name:             body.customer_name,
+      phone:            body.phone,
+      address:          body.address || body.city,
+      city:             matchCity(body.city),
+      totalAmount:      Number(body.total_price ?? 0),
+      quantity:         Number(body.quantity ?? 1),
+      content:          body.content || 'Lunettes de soleil Nyvara',
+      note:             body.note ?? undefined,
+      source:           'nyvara',
+      externalBarcode:  body.order_id ?? undefined,  // links Cosmos order → Nyvara order
       options: {
         allowToOpen: true,
         isFragile:   false,

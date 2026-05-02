@@ -162,10 +162,10 @@ export default function AdminOrdersPage() {
                     )}
                   </td>
                   <td>
-                    {order.cosmos_label_pdf_url ? (
+                    {order.cosmos_barcode ? (
                       <div className={styles.labelBtns}>
                         <a
-                          href={order.cosmos_label_pdf_url}
+                          href={`/api/cosmos/labels?barcode=${order.cosmos_barcode}&format=pdf`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={styles.labelBtn}
@@ -174,7 +174,7 @@ export default function AdminOrdersPage() {
                           🖨 PDF
                         </a>
                         <a
-                          href={order.cosmos_label_url ?? '#'}
+                          href={`/api/cosmos/labels?barcode=${order.cosmos_barcode}&format=html`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className={`${styles.labelBtn} ${styles.labelBtnHtml}`}

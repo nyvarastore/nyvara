@@ -97,6 +97,7 @@ export function useCreateOrder() {
             city:          payload.city,
             total_price:   total_price,
             quantity:      payload.items.reduce((s, i) => s + i.quantity, 0),
+            order_id:      order.id,  // used as externalBarcode in Cosmos
           }),
         });
 

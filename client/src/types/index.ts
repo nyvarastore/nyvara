@@ -12,6 +12,7 @@ export interface Product {
   title: string | null;
   description: string | null;
   price: number | null;
+  cost_price: number | null;   // purchase/original price
   image_url: string | null;
   created_at: string | null;
   category_id: string | null;
