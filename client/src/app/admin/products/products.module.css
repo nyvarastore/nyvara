@@ -16,6 +16,15 @@
 }
 .actionBtn:hover { background: var(--color-cream); }
 
+.actionBtns { display: flex; gap: 6px; }
+
+.deleteBtn {
+  border-color: rgba(255,80,80,0.3) !important;
+  background: rgba(255,80,80,0.07) !important;
+  color: #ff5050;
+}
+.deleteBtn:hover { background: rgba(255,80,80,0.18) !important; }
+
 /* Cost / Margin */
 .costPrice  { color: #888; font-size: 13px; }
 .noCost     { color: #555; font-size: 13px; }

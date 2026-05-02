@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, ShoppingCart, Package, LogOut } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, LogOut, Tag } from 'lucide-react';
 import { logoutAction } from './actions';
 import { useOrderNotification } from '@/hooks/useOrderNotification';
 import OrderToast from '@/components/admin/OrderToast';
@@ -41,6 +41,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin/products" className={styles.navItem} data-active={pathname === '/admin/products'}>
             <Package size={20} />
             <span>Produits</span>
+          </Link>
+          <Link href="/admin/categories" className={styles.navItem} data-active={pathname === '/admin/categories'}>
+            <Tag size={20} />
+            <span>Catégories</span>
           </Link>
         </nav>
 

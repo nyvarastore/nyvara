@@ -2,63 +2,108 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import type { Product } from '@/types';
+import type { Product, Category } from '@/types';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import adminStyles from '../admin.module.css';
 import styles from './products.module.css';
 
+type FormState = {
+  title: string;
+  price: string;
+  cost_price: string;
+  description: string;
+  image_url: string;
+  gender: string;
+  category_id: string;
+};
+
+const emptyForm: FormState = {
+  title: '', price: '', cost_price: '', description: '',
+  image_url: '', gender: 'unisex', category_id: '',
+};
+
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading]   = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [submitting, setSubmitting]   = useState(false);
+  const [products, setProducts]   = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading]     = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
-  const [formData, setFormData] = useState({
-    title:      '',
-    price:      '',
-    cost_price: '',
-    description:'',
-    image_url:  '',
-    gender:     'unisex',
-  });
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null); // null = add mode
+  const [formData, setFormData]   = useState<FormState>(emptyForm);
 
-  const fetchProducts = () => {
+  const fetchAll = () => {
     setLoading(true);
-    supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .then(({ data }) => {
-        if (data) setProducts(data as Product[]);
-        setLoading(false);
-      });
+    Promise.all([
+      supabase.from('products').select('*, categories(*)').order('created_at', { ascending: false }),
+      supabase.from('categories').select('*').order('name'),
+    ]).then(([{ data: prods }, { data: cats }]) => {
+      if (prods) setProducts(prods as Product[]);
+      if (cats)  setCategories(cats as Category[]);
+      setLoading(false);
+    });
   };
 
-  useEffect(() => { fetchProducts(); }, []);
+  useEffect(() => { fetchAll(); }, []);
 
-  const handleAddProduct = async (e: React.FormEvent) => {
+  // Open modal in ADD mode
+  const openAddModal = () => {
+    setEditingProduct(null);
+    setFormData(emptyForm);
+    setModalOpen(true);
+  };
+
+  // Open modal in EDIT mode pre-filled
+  const openEditModal = (p: Product) => {
+    setEditingProduct(p);
+    setFormData({
+      title:       p.title       ?? '',
+      price:       p.price       != null ? String(p.price)       : '',
+      cost_price:  p.cost_price  != null ? String(p.cost_price)  : '',
+      description: p.description ?? '',
+      image_url:   p.image_url   ?? '',
+      gender:      p.gender      ?? 'unisex',
+      category_id: p.category_id ?? '',
+    });
+    setModalOpen(true);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
 
-    const { error } = await supabase.from('products').insert([{
+    const payload = {
       title:       formData.title,
-      price:       parseFloat(formData.price),
+      price:       parseFloat(formData.price) || 0,
       cost_price:  formData.cost_price ? parseFloat(formData.cost_price) : null,
       description: formData.description,
       image_url:   formData.image_url,
       gender:      formData.gender,
-    }]);
+      category_id: formData.category_id || null,
+    };
+
+    const { error } = editingProduct
+      ? await supabase.from('products').update(payload).eq('id', editingProduct.id)
+      : await supabase.from('products').insert([payload]);
 
     setSubmitting(false);
 
     if (!error) {
-      setIsModalOpen(false);
-      setFormData({ title: '', price: '', cost_price: '', description: '', image_url: '', gender: 'unisex' });
-      fetchProducts();
+      setModalOpen(false);
+      setFormData(emptyForm);
+      setEditingProduct(null);
+      fetchAll();
     } else {
-      alert("Erreur lors de l'ajout: " + error.message);
+      alert('Erreur: ' + error.message);
     }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Supprimer ce produit ?')) return;
+    await supabase.from('products').delete().eq('id', id);
+    fetchAll();
   };
 
   const margin = (p: Product) => {
@@ -66,15 +111,16 @@ export default function AdminProductsPage() {
     return p.price - p.cost_price;
   };
 
+  const set = (field: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+    setFormData(prev => ({ ...prev, [field]: e.target.value }));
+
   if (loading) return <div className={adminStyles.contentArea}>Chargement...</div>;
 
   return (
     <div>
       <div className={adminStyles.pageHeader}>
         <h1 className={adminStyles.pageTitle}>Produits</h1>
-        <Button variant="primary" onClick={() => setIsModalOpen(true)}>
-          + Ajouter un produit
-        </Button>
+        <Button variant="primary" onClick={openAddModal}>+ Ajouter un produit</Button>
       </div>
 
       <div className={adminStyles.tableContainer}>
@@ -83,6 +129,7 @@ export default function AdminProductsPage() {
             <tr>
               <th>Image</th>
               <th>Nom</th>
+              <th>Catégorie</th>
               <th>Prix vente</th>
               <th>Prix achat</th>
               <th>Marge</th>
@@ -91,18 +138,19 @@ export default function AdminProductsPage() {
             </tr>
           </thead>
           <tbody>
-            {products.map(product => {
-              const m = margin(product);
+            {products.map(p => {
+              const m = margin(p);
               return (
-                <tr key={product.id}>
+                <tr key={p.id}>
                   <td>
-                    <img src={product.image_url || ''} alt={product.title || 'Produit'} className={styles.productImage} />
+                    <img src={p.image_url || ''} alt={p.title || ''} className={styles.productImage} />
                   </td>
-                  <td>{product.title}</td>
-                  <td>{product.price?.toFixed(3)} TND</td>
+                  <td>{p.title}</td>
+                  <td>{p.categories?.name ?? <span className={styles.noCost}>—</span>}</td>
+                  <td>{p.price?.toFixed(3)} TND</td>
                   <td>
-                    {product.cost_price != null
-                      ? <span className={styles.costPrice}>{product.cost_price.toFixed(3)} TND</span>
+                    {p.cost_price != null
+                      ? <span className={styles.costPrice}>{p.cost_price.toFixed(3)} TND</span>
                       : <span className={styles.noCost}>—</span>}
                   </td>
                   <td>
@@ -110,75 +158,78 @@ export default function AdminProductsPage() {
                       ? <span className={m >= 0 ? styles.marginPos : styles.marginNeg}>{m.toFixed(3)} TND</span>
                       : <span className={styles.noCost}>—</span>}
                   </td>
-                  <td>{product.gender}</td>
+                  <td>{p.gender}</td>
                   <td>
-                    <button className={styles.actionBtn}>Éditer</button>
+                    <div className={styles.actionBtns}>
+                      <button className={styles.actionBtn} onClick={() => openEditModal(p)}>✏️ Éditer</button>
+                      <button className={`${styles.actionBtn} ${styles.deleteBtn}`} onClick={() => handleDelete(p.id)}>🗑</button>
+                    </div>
                   </td>
                 </tr>
               );
             })}
             {products.length === 0 && (
-              <tr>
-                <td colSpan={7} style={{ textAlign: 'center' }}>Aucun produit pour le moment.</td>
-              </tr>
+              <tr><td colSpan={8} style={{ textAlign: 'center' }}>Aucun produit.</td></tr>
             )}
           </tbody>
         </table>
       </div>
 
-      {/* Add Product Modal */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Ajouter un produit">
-        <form onSubmit={handleAddProduct} className={styles.form}>
+      {/* Add / Edit Modal */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => { setModalOpen(false); setEditingProduct(null); }}
+        title={editingProduct ? `Éditer — ${editingProduct.title}` : 'Ajouter un produit'}
+      >
+        <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <label>Nom du produit</label>
-            <input required type="text" className={styles.input}
-              value={formData.title}
-              onChange={e => setFormData({...formData, title: e.target.value})} />
+            <input required type="text" className={styles.input} value={formData.title} onChange={set('title')} />
           </div>
 
           <div className={styles.priceRow}>
             <div className={styles.inputGroup}>
               <label>Prix de vente (TND)</label>
-              <input required type="number" step="0.001" className={styles.input}
-                value={formData.price}
-                onChange={e => setFormData({...formData, price: e.target.value})} />
+              <input required type="number" step="0.001" className={styles.input} value={formData.price} onChange={set('price')} />
             </div>
             <div className={styles.inputGroup}>
               <label>Prix d&apos;achat / coût (TND)</label>
-              <input type="number" step="0.001" className={styles.input}
-                placeholder="0.000"
-                value={formData.cost_price}
-                onChange={e => setFormData({...formData, cost_price: e.target.value})} />
+              <input type="number" step="0.001" className={styles.input} placeholder="0.000" value={formData.cost_price} onChange={set('cost_price')} />
+            </div>
+          </div>
+
+          <div className={styles.priceRow}>
+            <div className={styles.inputGroup}>
+              <label>Genre</label>
+              <select className={styles.input} value={formData.gender} onChange={set('gender')}>
+                <option value="unisex">Unisexe</option>
+                <option value="homme">Homme</option>
+                <option value="femme">Femme</option>
+              </select>
+            </div>
+            <div className={styles.inputGroup}>
+              <label>Catégorie</label>
+              <select className={styles.input} value={formData.category_id} onChange={set('category_id')}>
+                <option value="">— Sans catégorie —</option>
+                {categories.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
             </div>
           </div>
 
           <div className={styles.inputGroup}>
-            <label>URL de l&apos;image (Supabase Storage)</label>
-            <input required type="url" className={styles.input}
-              value={formData.image_url}
-              onChange={e => setFormData({...formData, image_url: e.target.value})} />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label>Genre</label>
-            <select className={styles.input}
-              value={formData.gender}
-              onChange={e => setFormData({...formData, gender: e.target.value})}>
-              <option value="unisex">Unisexe</option>
-              <option value="homme">Homme</option>
-              <option value="femme">Femme</option>
-            </select>
+            <label>URL de l&apos;image</label>
+            <input required={!editingProduct} type="url" className={styles.input} value={formData.image_url} onChange={set('image_url')} />
           </div>
 
           <div className={styles.inputGroup}>
             <label>Description</label>
-            <textarea className={styles.input} rows={4}
-              value={formData.description}
-              onChange={e => setFormData({...formData, description: e.target.value})} />
+            <textarea className={styles.input} rows={3} value={formData.description} onChange={set('description')} />
           </div>
 
-          <Button type="submit" variant="primary" style={{ width: '100%', marginTop: '16px' }}>
-            {submitting ? 'Ajout en cours...' : 'Ajouter le produit'}
+          <Button type="submit" variant="primary" style={{ width: '100%', marginTop: '8px' }}>
+            {submitting ? 'Enregistrement...' : editingProduct ? '💾 Enregistrer les modifications' : 'Ajouter le produit'}
           </Button>
         </form>
       </Modal>
