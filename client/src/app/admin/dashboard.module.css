@@ -140,6 +140,63 @@
   padding-top: 10px;
 }
 
+/* ─── Ads Cost ─── */
+.adsBlock { display: flex; flex-direction: column; gap: 8px; }
+
+.adsInputRow {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.adsInput {
+  width: 100px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--color-gold);
+  font-size: 13px;
+  background: white;
+  outline: none;
+  text-align: right;
+}
+
+.adsSaveBtn {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: none;
+  background: var(--color-gold);
+  color: #000;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.adsEditBtn {
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 80, 80, 0.4);
+  background: rgba(255, 80, 80, 0.08);
+  color: #ff5050;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.adsEditBtn:hover { background: rgba(255, 80, 80, 0.18); }
+
+.noCostDash { color: #555; font-size: 13px; }
+
+/* Final net row */
+.netFinalRow {
+  font-size: 20px;
+  font-weight: 900;
+  margin-top: 6px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.04);
+}
+
 /* ─── Recent Orders Section ─── */
 .chartSection {
   background: white;
