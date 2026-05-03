@@ -1,30 +1,66 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowDown } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowDown, Sparkles } from 'lucide-react';
 import styles from './HeroSection.module.css';
 
 export default function HeroSection() {
   return (
     <section className={styles.hero} aria-label="Hero">
-      {/* Background gradient blocks inspired by reference image */}
-      <div className={styles.bgLeft}  aria-hidden="true" />
-      <div className={styles.bgRight} aria-hidden="true" />
 
+      {/* ── Ambient background layers ── */}
+      <div className={styles.bgBase} aria-hidden="true" />
+      <div className={styles.bgGlow1} aria-hidden="true" />
+      <div className={styles.bgGlow2} aria-hidden="true" />
+      <div className={styles.bgGrid}  aria-hidden="true" />
+
+      {/* ── Main content ── */}
       <div className={styles.inner}>
-        {/* Left column — texte éditorial */}
+
+        {/* Left — editorial text */}
         <div className={styles.textCol}>
-          <p className={styles.eyebrow}>Nouvelle Collection 2024</p>
+
+          <div className={styles.badge}>
+            <Sparkles size={11} />
+            <span>Nouvelle Collection 2026</span>
+          </div>
+
           <h1 className={styles.headline}>
-            <span className={styles.headlineThin}>PERSONNALISE</span>
+            <span className={styles.headlineTop}>Voir le monde</span>
+            <span className={styles.headlineAccent}>autrement.</span>
           </h1>
+
           <p className={styles.subline}>
-            La façon dont vous voyez le jour.<br />
-            Créez des lunettes au style unique.
+            Des lunettes de luxe taillées pour les visionnaires.
+            <br />
+            Style. Précision. Caractère.
           </p>
+
+          {/* Stats row */}
+          <div className={styles.stats}>
+            <div className={styles.statItem}>
+              <span className={styles.statNum}>200+</span>
+              <span className={styles.statLabel}>Modèles</span>
+            </div>
+            <div className={styles.statDivider} />
+            <div className={styles.statItem}>
+              <span className={styles.statNum}>100%</span>
+              <span className={styles.statLabel}>Artisanal</span>
+            </div>
+            <div className={styles.statDivider} />
+            <div className={styles.statItem}>
+              <span className={styles.statNum}>48h</span>
+              <span className={styles.statLabel}>Livraison</span>
+            </div>
+          </div>
+
           <div className={styles.actions}>
             <Link href="/shop" className={styles.primaryCta}>
-              Acheter
+              <span>Découvrir</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </Link>
             <Link href="/shop" className={styles.secondaryCta}>
               Explorer la Collection
@@ -32,49 +68,50 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Right column — hero visual */}
-        <div className={styles.visual}>
-          <div className={styles.heroImage}>
-            {/* Decorative sunglasses silhouette SVG */}
-            <svg
-              className={styles.glassesSvg}
-              viewBox="0 0 320 120"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M10 60 Q10 20 55 20 Q100 20 100 60 Q100 100 55 100 Q10 100 10 60Z"
-                fill="none" stroke="#0A0A0A" strokeWidth="5"
-              />
-              <path
-                d="M220 60 Q220 20 265 20 Q310 20 310 60 Q310 100 265 100 Q220 100 220 60Z"
-                fill="none" stroke="#0A0A0A" strokeWidth="5"
-              />
-              <line x1="100" y1="60" x2="220" y2="60" stroke="#0A0A0A" strokeWidth="5" strokeLinecap="round" />
-              <line x1="10"  y1="55" x2="0"   y2="40" stroke="#0A0A0A" strokeWidth="5" strokeLinecap="round" />
-              <line x1="310" y1="55" x2="320" y2="40" stroke="#0A0A0A" strokeWidth="5" strokeLinecap="round" />
-              {/* Lens tint */}
-              <path
-                d="M15 60 Q15 25 55 25 Q95 25 95 60 Q95 95 55 95 Q15 95 15 60Z"
-                fill="#0A0A0A" opacity="0.08"
-              />
-              <path
-                d="M225 60 Q225 25 265 25 Q305 25 305 60 Q305 95 265 95 Q225 95 225 60Z"
-                fill="#0A0A0A" opacity="0.08"
-              />
-            </svg>
+        {/* Right — model image */}
+        <div className={styles.visual} aria-hidden="false">
+          <div className={styles.imageWrap}>
 
-            <div className={styles.heroAccent} aria-hidden="true" />
+            {/* Floating accent ring */}
+            <div className={styles.ringOuter} aria-hidden="true" />
+            <div className={styles.ringInner} aria-hidden="true" />
+
+            {/* Gold corner brackets */}
+            <div className={styles.cornerTL} aria-hidden="true" />
+            <div className={styles.cornerBR} aria-hidden="true" />
+
+            {/* Model photo */}
+            <Image
+              src="/hero-model.png"
+              alt="Modèle portant des lunettes de soleil Nyvara"
+              fill
+              priority
+              sizes="(max-width: 900px) 100vw, 55vw"
+              className={styles.modelImg}
+            />
+
+            {/* Overlay gradient so image blends beautifully */}
+            <div className={styles.imgOverlay} aria-hidden="true" />
+
+            {/* Floating tag */}
+            <div className={styles.floatTag}>
+              <span className={styles.floatTagDot} />
+              <span>Collection Exclusive 2026</span>
+            </div>
+
+            {/* Year watermark */}
+            <div className={styles.yearMark} aria-hidden="true">2026</div>
           </div>
         </div>
+
       </div>
 
       {/* Scroll indicator */}
       <a href="#featured" className={styles.scrollIndicator} aria-label="Défiler vers le bas">
         <span className={styles.scrollText}>Défiler pour les styles</span>
-        <ArrowDown size={16} className={styles.scrollArrow} />
+        <ArrowDown size={14} className={styles.scrollArrow} />
       </a>
+
     </section>
   );
 }
