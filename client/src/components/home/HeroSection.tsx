@@ -34,7 +34,7 @@ export default function HeroSection() {
           <p className={styles.subline}>
             Des lunettes de luxe taillées pour les visionnaires.
             <br />
-            Style. Précision. Caractère.
+            Style. Précision. Fashion.
           </p>
 
           {/* Stats row */}
@@ -103,15 +103,7 @@ export default function HeroSection() {
             <div className={styles.yearMark} aria-hidden="true">2026</div>
           </div>
         </div>
-
       </div>
-
-      {/* Scroll indicator */}
-      <a href="#featured" className={styles.scrollIndicator} aria-label="Défiler vers le bas">
-        <span className={styles.scrollText}>Défiler pour les styles</span>
-        <ArrowDown size={14} className={styles.scrollArrow} />
-      </a>
-
     </section>
   );
 }

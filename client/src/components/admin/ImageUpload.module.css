@@ -1,0 +1,110 @@
+.uploadContainer {
+  width: 100%;
+  border: 2px dashed rgba(201, 169, 110, 0.4); /* Gold dashed border */
+  border-radius: 12px;
+  background: rgba(250, 250, 248, 0.02);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.uploadContainer:hover {
+  background: rgba(201, 169, 110, 0.05);
+  border-color: var(--color-gold);
+}
+
+.uploadContainer.dragging {
+  background: rgba(201, 169, 110, 0.1);
+  border-color: var(--color-gold);
+}
+
+.uploadContainer.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.icon {
+  color: var(--color-gold);
+  margin-bottom: 12px;
+}
+
+.title {
+  font-family: var(--font-editorial);
+  font-size: 1.2rem;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--color-grey-light);
+}
+
+.hiddenInput {
+  display: none;
+}
+
+/* ── Loading State ── */
+.loadingOverlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-gold);
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Preview State ── */
+.previewContainer {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(250, 250, 248, 0.1);
+}
+
+.previewImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.removeBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.removeBtn:hover {
+  background: rgba(220, 38, 38, 0.8); /* Red hover */
+  transform: scale(1.05);
+}

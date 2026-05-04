@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import ProductCard from './ProductCard';
+import ProductSkeleton from './ProductSkeleton';
 import Modal from '@/components/ui/Modal';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Image from 'next/image';
@@ -27,8 +28,10 @@ export default function ProductGrid({ products, loading = false, error = null }:
 
   if (loading) {
     return (
-      <div className={styles.loadingWrap}>
-        <LoadingSpinner size="lg" color="gold" label="Loading products…" />
+      <div className={styles.grid}>
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <ProductSkeleton key={i} />
+        ))}
       </div>
     );
   }

@@ -9,16 +9,16 @@ import FacebookPixel from '@/components/analytics/FacebookPixel';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Nyvara — Lunettes de Soleil de Luxe Tunisie',
+    default: 'Nyvara — Accessoires de Luxe Tunisie',
     template: '%s | Nyvara',
   },
   description:
-    'Découvrez des lunettes de soleil de luxe uniques et personnalisables conçues pour la Tunisie. Nyvara — là où le style rencontre le soleil méditerranéen.',
-  keywords: ['lunettes de soleil', 'Tunisie', 'lunettes', 'TND', 'lunetterie de luxe', 'Nyvara'],
+    'Découvrez des accessoires de luxe uniques conçus pour la Tunisie. Nyvara — là où l\'élégance rencontre le style de vie méditerranéen.',
+  keywords: ['accessoires de luxe', 'Tunisie', 'bijoux', 'bagues', 'lunettes de soleil', 'TND', 'Nyvara'],
   authors: [{ name: 'Nyvara' }],
   openGraph: {
-    title:       'Nyvara — Lunettes de Soleil de Luxe Tunisie',
-    description: 'Lunettes de soleil de luxe uniques et personnalisables pour le marché tunisien.',
+    title:       'Nyvara — Accessoires de Luxe Tunisie',
+    description: 'Accessoires de luxe uniques et élégants pour le marché tunisien.',
     type:        'website',
     locale:      'fr_TN',
   },

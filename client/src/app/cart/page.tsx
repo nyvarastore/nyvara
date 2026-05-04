@@ -16,6 +16,8 @@ function CartContent() {
   const { items, itemCount, clearCart } = useCart();
   const [step, setStep] = useState<'cart' | 'checkout' | 'success'>('cart');
 
+  const [orderId, setOrderId] = useState<string | null>(null);
+
   useEffect(() => {
     if (searchParams.get('checkout') === 'true' && items.length > 0) {
       setStep('checkout');
@@ -34,10 +36,15 @@ function CartContent() {
             <p className={styles.emptyText}>
               Votre commande a été reçue avec succès. Nous vous contacterons très prochainement par téléphone pour confirmer les détails de la livraison.
             </p>
-            <div style={{ display: 'flex', gap: '16px', marginTop: '24px' }}>
+            <div style={{ display: 'flex', gap: '16px', marginTop: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Link href="/shop">
                 <Button variant="gold" size="lg">Continuer vos achats</Button>
               </Link>
+              {orderId && (
+                <Link href={`/track/${orderId}`}>
+                  <Button variant="primary" size="lg">Suivre ma commande</Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -102,7 +109,11 @@ function CartContent() {
                   </div>
                 </>
               ) : (
-                <CheckoutForm onSuccess={() => setStep('success')} />
+                <CheckoutForm onSuccess={(id) => {
+                  setOrderId(id);
+                  setStep('success');
+                  localStorage.setItem('nyvara_last_order', id);
+                }} />
               )}
             </div>
 

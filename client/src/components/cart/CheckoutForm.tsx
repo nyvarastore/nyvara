@@ -8,7 +8,7 @@ import styles from './CheckoutForm.module.css';
 import { fbEvent, trackPurchase } from '@/components/analytics/FacebookPixel';
 
 interface CheckoutFormProps {
-  onSuccess: () => void;
+  onSuccess: (orderId: string) => void;
 }
 
 export default function CheckoutForm({ onSuccess }: CheckoutFormProps) {
@@ -83,7 +83,7 @@ export default function CheckoutForm({ onSuccess }: CheckoutFormProps) {
         num_items:   items.reduce((s, i) => s + i.quantity, 0),
       });
       clearCart();
-      onSuccess();
+      onSuccess(result.id);
     } else {
       setErrorLocal('Erreur lors de la commande. Veuillez réessayer.');
     }

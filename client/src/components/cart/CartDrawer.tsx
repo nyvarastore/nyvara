@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, ShoppingBag } from 'lucide-react';
+import { X, ShoppingBag, Package } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import CartItem from './CartItem';
 import OrderSummary from './OrderSummary';
@@ -18,10 +18,16 @@ interface CartDrawerProps {
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const { items, itemCount, clearCart } = useCart();
   const router = useRouter();
+  const [lastOrder, setLastOrder] = useState<string | null>(null);
 
-  // Lock body scroll when open
+  // Lock body scroll when open and check for last order
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      setLastOrder(localStorage.getItem('nyvara_last_order'));
+    } else {
+      document.body.style.overflow = '';
+    }
     return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
@@ -78,6 +84,18 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
         {/* Content */}
         <div className={styles.content}>
+          {lastOrder && (
+            <div className={styles.trackingBanner}>
+              <div className={styles.trackingInfo}>
+                <Package size={16} />
+                <span>Suivi de commande</span>
+              </div>
+              <Link href={`/track/${lastOrder}`} onClick={onClose} className={styles.trackingLink}>
+                Suivre →
+              </Link>
+            </div>
+          )}
+
           {items.length === 0 ? (
             <div className={styles.empty}>
               <ShoppingBag size={48} className={styles.emptyIcon} />

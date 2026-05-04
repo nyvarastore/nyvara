@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import type { Product, Category } from '@/types';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
+import ImageUpload from '@/components/admin/ImageUpload';
 import adminStyles from '../admin.module.css';
 import styles from './products.module.css';
 
@@ -12,6 +13,7 @@ type FormState = {
   title: string;
   price: string;
   cost_price: string;
+  stock: string;
   description: string;
   image_url: string;
   gender: string;
@@ -19,7 +21,7 @@ type FormState = {
 };
 
 const emptyForm: FormState = {
-  title: '', price: '', cost_price: '', description: '',
+  title: '', price: '', cost_price: '', stock: '0', description: '',
   image_url: '', gender: 'unisex', category_id: '',
 };
 
@@ -28,6 +30,7 @@ export default function AdminProductsPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading]     = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
@@ -62,6 +65,7 @@ export default function AdminProductsPage() {
       title:       p.title       ?? '',
       price:       p.price       != null ? String(p.price)       : '',
       cost_price:  p.cost_price  != null ? String(p.cost_price)  : '',
+      stock:       p.stock       != null ? String(p.stock)       : '0',
       description: p.description ?? '',
       image_url:   p.image_url   ?? '',
       gender:      p.gender      ?? 'unisex',
@@ -78,6 +82,7 @@ export default function AdminProductsPage() {
       title:       formData.title,
       price:       parseFloat(formData.price) || 0,
       cost_price:  formData.cost_price ? parseFloat(formData.cost_price) : null,
+      stock:       parseInt(formData.stock, 10) || 0,
       description: formData.description,
       image_url:   formData.image_url,
       gender:      formData.gender,
@@ -130,6 +135,7 @@ export default function AdminProductsPage() {
               <th>Image</th>
               <th>Nom</th>
               <th>Catégorie</th>
+              <th>Stock</th>
               <th>Prix vente</th>
               <th>Prix achat</th>
               <th>Marge</th>
@@ -147,6 +153,11 @@ export default function AdminProductsPage() {
                   </td>
                   <td>{p.title}</td>
                   <td>{p.categories?.name ?? <span className={styles.noCost}>—</span>}</td>
+                  <td>
+                    {p.stock != null && p.stock > 0 
+                      ? <span style={{ color: 'var(--color-charcoal)' }}>{p.stock}</span>
+                      : <span style={{ color: 'var(--color-error)' }}>Rupture</span>}
+                  </td>
                   <td>{p.price?.toFixed(3)} TND</td>
                   <td>
                     {p.cost_price != null
@@ -169,7 +180,7 @@ export default function AdminProductsPage() {
               );
             })}
             {products.length === 0 && (
-              <tr><td colSpan={8} style={{ textAlign: 'center' }}>Aucun produit.</td></tr>
+              <tr><td colSpan={9} style={{ textAlign: 'center' }}>Aucun produit.</td></tr>
             )}
           </tbody>
         </table>
@@ -196,6 +207,10 @@ export default function AdminProductsPage() {
               <label>Prix d&apos;achat / coût (TND)</label>
               <input type="number" step="0.001" className={styles.input} placeholder="0.000" value={formData.cost_price} onChange={set('cost_price')} />
             </div>
+            <div className={styles.inputGroup}>
+              <label>Stock</label>
+              <input type="number" step="1" className={styles.input} value={formData.stock} onChange={set('stock')} />
+            </div>
           </div>
 
           <div className={styles.priceRow}>
@@ -219,8 +234,12 @@ export default function AdminProductsPage() {
           </div>
 
           <div className={styles.inputGroup}>
-            <label>URL de l&apos;image</label>
-            <input required={!editingProduct} type="url" className={styles.input} value={formData.image_url} onChange={set('image_url')} />
+            <label>Image du produit</label>
+            <ImageUpload 
+              value={formData.image_url} 
+              onChange={(url) => setFormData(prev => ({ ...prev, image_url: url }))}
+              onUploading={(status) => setUploadingImage(status)}
+            />
           </div>
 
           <div className={styles.inputGroup}>
@@ -228,8 +247,8 @@ export default function AdminProductsPage() {
             <textarea className={styles.input} rows={3} value={formData.description} onChange={set('description')} />
           </div>
 
-          <Button type="submit" variant="primary" style={{ width: '100%', marginTop: '8px' }}>
-            {submitting ? 'Enregistrement...' : editingProduct ? '💾 Enregistrer les modifications' : 'Ajouter le produit'}
+          <Button type="submit" variant="primary" style={{ width: '100%', marginTop: '8px' }} disabled={submitting || uploadingImage}>
+            {submitting ? 'Enregistrement...' : uploadingImage ? 'Téléchargement de l\'image...' : editingProduct ? '💾 Enregistrer les modifications' : 'Ajouter le produit'}
           </Button>
         </form>
       </Modal>

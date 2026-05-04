@@ -34,7 +34,7 @@ function ShopContent() {
       <div className={styles.pageHeader}>
         <div className={styles.pageHeaderInner}>
           <p className={styles.eyebrow}>Notre Collection</p>
-          <h1 className={styles.pageTitle}>Boutique Lunettes</h1>
+          <h1 className={styles.pageTitle}>Boutique</h1>
           <p className={styles.pageSubtitle}>
             Découvrez des lunettes premium conçues pour le soleil tunisien
           </p>

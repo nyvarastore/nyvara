@@ -1,20 +1,26 @@
-/* ─── Header ──────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   NAVBAR — Nyvara
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── Header ──────────────────────────────────────────────── */
 .header {
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 100;
+  z-index: 200;
   height: var(--nav-height);
-  background: rgba(247, 243, 237, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(247, 243, 237, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid transparent;
   transition: all var(--transition-base);
 }
 .scrolled {
   background: rgba(247, 243, 237, 0.97);
   border-bottom-color: var(--color-cream-dark);
-  box-shadow: 0 1px 20px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 24px rgba(0,0,0,0.07);
 }
+
+/* ─── Inner ───────────────────────────────────────────────── */
 .inner {
   max-width: 1280px;
   margin: 0 auto;
@@ -26,7 +32,7 @@
   gap: 24px;
 }
 
-/* ─── Logo ────────────────────────────────────────────────────── */
+/* ─── Logo ────────────────────────────────────────────────── */
 .logo {
   font-family: var(--font-editorial);
   font-size: 1.6rem;
@@ -37,10 +43,11 @@
   left: 50%;
   transform: translateX(-50%);
   transition: opacity var(--transition-fast);
+  z-index: 1;
 }
 .logo:hover { opacity: 0.7; }
 
-/* ─── Nav Links ───────────────────────────────────────────────── */
+/* ─── Nav Links (desktop) ─────────────────────────────────── */
 .navLinks {
   display: flex;
   align-items: center;
@@ -64,34 +71,32 @@
   transform: scaleX(0);
   transition: transform var(--transition-base);
 }
-.navLink:hover, .active {
-  color: var(--color-black);
-}
-.active::after, .navLink:hover::after {
-  transform: scaleX(1);
-}
+.navLink:hover, .active { color: var(--color-black); }
+.active::after, .navLink:hover::after { transform: scaleX(1); }
 
-/* ─── Actions ─────────────────────────────────────────────────── */
+/* ─── Actions (icon row) ──────────────────────────────────── */
 .actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 .iconBtn {
   position: relative;
   display: flex; align-items: center; justify-content: center;
-  width: 38px; height: 38px;
+  width: 40px; height: 40px;
   border-radius: var(--radius-full);
   color: var(--color-black);
   transition: background var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
 }
 .iconBtn:hover { background: var(--color-cream-dark); }
+
 .badge {
   position: absolute;
   top: 4px; right: 4px;
   width: 16px; height: 16px;
   background: var(--color-gold);
-  color: var(--color-white);
+  color: #fff;
   font-size: 9px;
   font-weight: 700;
   border-radius: var(--radius-full);
@@ -104,7 +109,7 @@
   100% { transform: scale(1); }
 }
 
-/* ─── Search Bar ──────────────────────────────────────────────── */
+/* ─── Search Bar ──────────────────────────────────────────── */
 .searchBar {
   border-top: 1px solid var(--color-cream-dark);
   padding: 12px 24px;
@@ -137,39 +142,196 @@
 .clearBtn { color: var(--color-grey); display: flex; }
 .clearBtn:hover { color: var(--color-black); }
 
-/* ─── Mobile Menu ─────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   MOBILE MENU — full-screen dark overlay
+   ═══════════════════════════════════════════════════════════ */
+
+/* Hamburger — hidden on desktop */
 .hamburger { display: none; }
+
+/* Full-screen overlay */
 .mobileMenu {
   position: fixed;
-  inset: var(--nav-height) 0 0 0;
-  z-index: 99;
-  background: var(--color-cream);
-  display: flex; align-items: center; justify-content: center;
-  animation: fadeIn 0.2s ease;
+  inset: 0;
+  z-index: 199;
+  background: #0D0C0A;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  padding-top: var(--nav-height);
+  animation: menuSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  overflow: hidden;
 }
+
+/* Ambient glow inside menu */
+.mobileMenu::before {
+  content: '';
+  position: absolute;
+  top: -20%; left: -20%;
+  width: 80%; height: 80%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,169,110,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+.mobileMenu::after {
+  content: '';
+  position: absolute;
+  bottom: -10%; right: -15%;
+  width: 60%; height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,169,110,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* Nav links list */
 .mobileNav {
-  display: flex; flex-direction: column;
-  align-items: center; gap: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 48px 40px;
+  flex: 1;
 }
+
+/* Each link row */
 .mobileLink {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(201,169,110,0.1);
   font-family: var(--font-editorial);
-  font-size: 2.4rem;
+  font-size: 2.6rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: rgba(250,250,248,0.45);
+  transition: color 0.25s ease;
+  animation: linkFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.mobileLink:nth-child(1) { animation-delay: 0.07s; }
+.mobileLink:nth-child(2) { animation-delay: 0.13s; }
+.mobileLink:nth-child(3) { animation-delay: 0.19s; }
+
+.mobileLink:hover,
+.activeMobile {
+  color: #FAFAF8;
+}
+.activeMobile {
+  color: #C9A96E;
+}
+
+/* Gold arrow on active */
+.mobileLinkArrow {
+  display: none;
+  margin-left: auto;
+  color: #C9A96E;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all 0.25s ease;
+}
+.activeMobile .mobileLinkArrow,
+.mobileLink:hover .mobileLinkArrow {
+  display: flex;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Index number */
+.mobileLinkNum {
+  font-family: var(--font-editorial);
+  font-size: 0.85rem;
+  color: rgba(201,169,110,0.5);
   font-weight: 300;
   letter-spacing: 0.08em;
-  color: var(--color-grey);
-  transition: color var(--transition-fast);
+  min-width: 28px;
 }
-.mobileLink:hover, .activeMobile { color: var(--color-black); }
 
+/* Extra Links (Search, Wishlist) */
+.mobileExtraLink {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(250,250,248,0.6);
+  background: none;
+  border: none;
+  text-align: left;
+  transition: color 0.25s ease;
+  animation: linkFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both;
+}
+.mobileExtraLink:hover {
+  color: #FAFAF8;
+}
+.mobileExtraIcon {
+  color: #C9A96E;
+}
+.mobileBadge {
+  background: var(--color-gold);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  margin-left: 8px;
+}
+
+/* Bottom bar inside menu */
+.mobileMenuBottom {
+  padding: 32px 40px;
+  border-top: 1px solid rgba(201,169,110,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: linkFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+.mobileMenuTag {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250,250,248,0.3);
+}
+.mobileMenuYear {
+  font-family: var(--font-editorial);
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: rgba(201,169,110,0.5);
+  letter-spacing: 0.12em;
+}
+
+/* ─── Keyframes ───────────────────────────────────────────── */
 @keyframes fadeDown {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes menuSlideIn {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes linkFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-/* ─── Responsive ──────────────────────────────────────────────── */
+/* ─── Responsive ──────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .navLinks { display: none; }
-  .hamburger { display: flex; }
-  .logo { font-size: 1.3rem; }
+  .navLinks     { display: none; }
+  .hamburger    { display: flex; }
+  .hideOnMobile { display: none !important; }
+  .logo         { font-size: 1.25rem; }
+  .inner        { padding: 0 16px; }
+  /* Cart + hamburger pushed to the right */
+  .actions      { margin-left: auto; gap: 2px; }
+}
+
+@media (max-width: 480px) {
+  .mobileNav { padding: 36px 28px; }
+  .mobileLink { font-size: 2.1rem; padding: 18px 0; }
+  .mobileMenuBottom { padding: 24px 28px; }
 }

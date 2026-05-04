@@ -102,6 +102,53 @@ export default function AdminOrdersPage() {
     };
   }, [syncDeliveryStatus]);
 
+  const confirmOrderAndDispatch = async (order: Order) => {
+    if (!confirm('Confirmer cette commande et l\'envoyer à Cosmos ?')) return;
+    setSyncing(true);
+    try {
+      // Fetch item quantity
+      const { data: items } = await supabase.from('order_items').select('quantity').eq('order_id', order.id);
+      const quantity = (items || []).reduce((s, i) => s + (i.quantity || 1), 0);
+
+      const cosmosRes = await fetch('/api/cosmos/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer_name: order.customer_name,
+          phone:         order.phone,
+          city:          order.city,
+          total_price:   order.total_price,
+          quantity:      quantity,
+          order_id:      order.id,
+        }),
+      });
+
+      if (cosmosRes.ok) {
+        const cosmosData = await cosmosRes.json();
+        const delivery   = cosmosData.data;
+
+        await supabase
+          .from('orders')
+          .update({
+            cosmos_barcode:      delivery.barcode,
+            cosmos_label_url:    delivery.labelUrl,
+            cosmos_label_pdf_url: delivery.labelPdfUrl,
+            cosmos_status:       delivery.status || 'to-be-picked',
+          })
+          .eq('id', order.id);
+        
+        await fetchOrders();
+      } else {
+        const errorText = await cosmosRes.text();
+        alert("Erreur lors de la création Cosmos: " + errorText);
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert("Erreur: " + err.message);
+    }
+    setSyncing(false);
+  };
+
   if (loading) return <div className={adminStyles.contentArea}>Chargement...</div>;
 
   return (
@@ -156,9 +203,20 @@ export default function AdminOrdersPage() {
                         {delivery?.label ?? order.cosmos_status ?? 'En attente'}
                       </span>
                     ) : (
-                      <span className={`${styles.deliveryBadge} ${styles.noShipment}`}>
-                        Non envoyé
-                      </span>
+                      order.cosmos_status === 'pending' ? (
+                        <button 
+                          className={`${styles.deliveryBadge} ${styles.pending}`}
+                          onClick={() => confirmOrderAndDispatch(order)}
+                          disabled={syncing}
+                          style={{ cursor: 'pointer', border: '1px solid var(--color-gold)' }}
+                        >
+                          Confirmer
+                        </button>
+                      ) : (
+                        <span className={`${styles.deliveryBadge} ${styles.noShipment}`}>
+                          Non envoyé
+                        </span>
+                      )
                     )}
                   </td>
                   <td>

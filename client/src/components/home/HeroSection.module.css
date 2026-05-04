@@ -358,28 +358,53 @@
 
 @media (max-width: 900px) {
   .inner {
-    flex-direction: column-reverse;
-    padding: 24px 24px 48px;
-    gap: 40px;
+    flex-direction: column;
+    padding: 0 16px 40px;
+    gap: 0;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
+  /* Image first — with padding and radius */
+  .visual {
+    order: -1;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    flex: none; /* Prevents stretching and huge gaps */
+    display: block; /* Removes flex centering of the image */
+  }
+  .imageWrap {
+    max-width: 100%;
+    width: 100%;
+    aspect-ratio: 4/5; /* Tall square */
+    border-radius: 20px;
+    margin: 0 auto;
+  }
+  .modelImg { border-radius: 20px; }
+  .imgOverlay { border-radius: 20px; }
+  .ringOuter, .ringInner { display: none; }
+  .cornerTL { top: 12px; left: 12px; }
+  .cornerBR { bottom: 12px; right: 12px; }
+  /* Text below */
   .textCol {
+    order: 0;
     width: 100%;
     text-align: center;
+    padding: 24px 0 0;
   }
   .badge { justify-content: center; }
   .actions { justify-content: center; }
   .stats { justify-content: center; }
-  .imageWrap {
-    max-width: 380px;
-    aspect-ratio: 4/5;
-  }
 }
 
 @media (max-width: 480px) {
   .textCol { width: 100%; }
-  .headlineAccent { font-size: 2.6rem; }
-  .headlineTop { font-size: 2rem; }
-  .imageWrap { max-width: 300px; }
+  .headlineAccent { font-size: 2.2rem; }
+  .headlineTop { font-size: 1.7rem; }
+  .imageWrap { aspect-ratio: 4/5; }
+  .floatTag { font-size: 9px; padding: 6px 12px; bottom: 12px; left: 12px; }
+  .badge { margin-bottom: 20px; }
+  .headline { margin-bottom: 16px; }
+  .subline { margin-bottom: 24px; font-size: 14px; line-height: 1.6; }
+  .stats { margin-bottom: 28px; }
 }

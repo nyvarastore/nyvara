@@ -13,6 +13,7 @@ export interface Product {
   description: string | null;
   price: number | null;
   cost_price: number | null;   // purchase/original price
+  stock: number | null;        // inventory count
   image_url: string | null;
   created_at: string | null;
   category_id: string | null;

@@ -1,0 +1,137 @@
+'use client';
+
+import React, { useState, useRef } from 'react';
+import { UploadCloud, X, Loader2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import styles from './ImageUpload.module.css';
+
+interface ImageUploadProps {
+  value: string; // The current image URL (if any)
+  onChange: (url: string) => void;
+  onUploading: (isUploading: boolean) => void;
+}
+
+export default function ImageUpload({ value, onChange, onUploading }: ImageUploadProps) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      await uploadFile(file);
+    }
+  };
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      await uploadFile(file);
+    }
+  };
+
+  const uploadFile = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert("Veuillez sélectionner une image valide.");
+      return;
+    }
+
+    setIsUploading(true);
+    onUploading(true);
+
+    try {
+      // 1. Create a unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `images/${fileName}`;
+
+      // 2. Upload to Supabase 'Product' bucket
+      const { error: uploadError } = await supabase.storage
+        .from('Product')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // 3. Get Public URL
+      const { data } = supabase.storage.from('Product').getPublicUrl(filePath);
+      
+      onChange(data.publicUrl);
+
+    } catch (error: any) {
+      console.error("Upload error:", error);
+      alert("Erreur lors du téléchargement de l'image : " + error.message);
+    } finally {
+      setIsUploading(false);
+      onUploading(false);
+      // Reset input
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const handleRemove = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering file select
+    onChange('');
+  };
+
+  // If we already have an image uploaded/set, show preview
+  if (value) {
+    return (
+      <div className={styles.previewContainer}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={value} alt="Aperçu" className={styles.previewImage} />
+        <button type="button" className={styles.removeBtn} onClick={handleRemove} title="Supprimer l'image">
+          <X size={18} />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div 
+      className={`${styles.uploadContainer} ${isDragging ? styles.dragging : ''} ${isUploading ? styles.disabled : ''}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      onClick={() => !isUploading && fileInputRef.current?.click()}
+    >
+      <input 
+        type="file" 
+        ref={fileInputRef}
+        onChange={handleFileSelect}
+        accept="image/*"
+        className={styles.hiddenInput}
+      />
+      
+      {isUploading ? (
+        <div className={styles.loadingOverlay}>
+          <Loader2 size={32} className={styles.spinner} />
+          <span>Téléchargement en cours...</span>
+        </div>
+      ) : (
+        <>
+          <UploadCloud size={40} className={styles.icon} />
+          <h3 className={styles.title}>Glissez une image ici</h3>
+          <p className={styles.subtitle}>ou cliquez pour parcourir (JPG, PNG, WebP)</p>
+        </>
+      )}
+    </div>
+  );
+}
